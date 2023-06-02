@@ -1,0 +1,106 @@
+{
+  "name": "playwright-ct-qwik",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/playwright-ct-qwik/src",
+  "projectType": "library",
+  "targets": {
+    "build-mount": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/playwright-ct-qwik",
+        "main": "packages/playwright-ct-qwik/src/index.ts",
+        "tsConfig": "packages/playwright-ct-qwik/tsconfig.lib.json",
+        "clean": false,
+        "assets": [
+          "README.md",
+          "CONTRIBUTING.md",
+          "CODE_OF_CONDUCT.md",
+          "LICENSE",
+          {
+            "input": "./assets",
+            "glob": "playwright-qwik.png",
+            "output": "./assets"
+          }
+        ]
+      }
+    },
+    "build-definition": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/playwright-ct-qwik",
+        "main": "packages/playwright-ct-qwik/definition.ts",
+        "tsConfig": "packages/playwright-ct-qwik/tsconfig.definition.json",
+        "clean": false
+      }
+    },
+    "copy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -r dist/packages/playwright-ct-qwik node_modules"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run playwright-ct-qwik:build-definition --skip-nx-cache && nx run playwright-ct-qwik:build-mount --skip-nx-cache"
+        ]
+      },
+      "outputPath": "node_modules/playwright-ct-qwik",
+      "outputs": ["{workspaceRoot}/dist/packages/playwright-ct-qwik"]
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/playwright-ct-qwik/**/*.ts"]
+      }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "releaseAs": "patch"
+      }
+    },
+    "version-publish": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "noVerify": true,
+        "push": true,
+        "releaseAs": "patch",
+        "postTargets": [
+          "playwright-ct-qwik:publish",
+          "playwright-ct-qwik:push-to-github"
+        ]
+      }
+    },
+    "version-publish-minor": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "noVerify": true,
+        "push": true,
+        "releaseAs": "minor",
+        "postTargets": [
+          "playwright-ct-qwik:publish",
+          "playwright-ct-qwik:push-to-github"
+        ]
+      }
+    },
+    "publish": {
+      "executor": "ngx-deploy-npm:deploy",
+      "options": {
+        "access": "public"
+      }
+    },
+    "push-to-github": {
+      "executor": "@jscutlery/semver:github",
+      "options": {
+        "tag": "${tag}",
+        "notes": "${notes}"
+      }
+    }
+  },
+  "tags": []
+}

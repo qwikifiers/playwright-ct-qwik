@@ -1,0 +1,20 @@
+{
+  "migrations": [
+    {
+      "version": "1.0.0",
+      "description": "In your entry.cloudflare-pages.ts, export fetch instead of onRequest. This is required in order to use the advanced mode of Cloudflare! it will allow future perf improvements and new features.",
+      "cli": "nx",
+      "implementation": "./src/migrations/migrate-cloudflare-integration/migrate-cloudflare-integration",
+      "package": "qwik-nx",
+      "name": "migrate-cloudflare-integration"
+    },
+    {
+      "version": "1.0.0",
+      "description": "Enabled type checking can be breaking. Adding a verbose option so that it is clear how to disable it",
+      "cli": "nx",
+      "implementation": "./src/migrations/add-verbose-skip-type-check-option-for-the-build-executor/add-verbose-skip-type-check-option-for-the-build-executor",
+      "package": "qwik-nx",
+      "name": "add-verbose-skip-type-check-option-for-the-build-executor"
+    }
+  ]
+}
