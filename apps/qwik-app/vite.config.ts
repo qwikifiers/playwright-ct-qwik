@@ -1,10 +1,18 @@
 import { qwikVite } from '@builder.io/qwik/optimizer';
 import { qwikCity } from '@builder.io/qwik-city/vite';
 import { defineConfig } from 'vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { qwikNxVite } from 'qwik-nx/plugins';
 
 export default defineConfig({
+  root: __dirname,
+  build: {
+    outDir: '../../dist/apps/qwik-app',
+    reportCompressedSize: true,
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
+  },
   plugins: [
     qwikNxVite(),
     qwikCity(),
@@ -16,7 +24,7 @@ export default defineConfig({
         outDir: '../../dist/apps/qwik-app/server',
       },
     }),
-    tsconfigPaths({ root: '../../' }),
+    nxViteTsPaths(),
   ],
   server: {
     fs: {
