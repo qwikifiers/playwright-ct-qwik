@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Copyright (c) Microsoft Corporation.
  *
@@ -14,16 +15,26 @@
  * limitations under the License.
  */
 
-const __pw_hooks_before_mount = [];
-const __pw_hooks_after_mount = [];
+import type { JSXOutput } from '@builder.io/qwik';
+import type { JsonObject } from '@playwright/experimental-ct-core/types/component';
+
+const __pw_hooks_before_mount: any[] = [];
+const __pw_hooks_after_mount: any[] = [];
 
 window.__pw_hooks_before_mount = __pw_hooks_before_mount;
 window.__pw_hooks_after_mount = __pw_hooks_after_mount;
 
-export const beforeMount = (callback) => {
+export function beforeMount<HooksConfig extends JsonObject>(
+  callback: (params: {
+    hooksConfig?: HooksConfig;
+    App: () => JSXOutput;
+  }) => Promise<void | JSXOutput>,
+): void {
   __pw_hooks_before_mount.push(callback);
-};
+}
 
-export const afterMount = (callback) => {
+export function afterMount<HooksConfig extends JsonObject>(
+  callback: (params: { hooksConfig?: HooksConfig }) => Promise<void>,
+): void {
   __pw_hooks_after_mount.push(callback);
-};
+}

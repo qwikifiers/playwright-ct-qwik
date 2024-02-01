@@ -7,6 +7,7 @@
   },
   "private": false,
   "scripts": {
+    "build": "nx build playwright-ct-qwik",
     "commit": "git-cz",
     "format:fix": "pretty-quick --staged",
     "prepare": "husky install"

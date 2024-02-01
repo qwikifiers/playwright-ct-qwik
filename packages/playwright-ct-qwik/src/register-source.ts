@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Copyright (c) Microsoft Corporation.
  *
@@ -19,6 +20,7 @@
 
 import { JSXOutput, render } from '@builder.io/qwik';
 import { QWIK_LOADER } from '@builder.io/qwik/loader';
+import { Component } from '@playwright/experimental-ct-core/types/component';
 /**
  * @param {any} component
  * @returns {component is JsxComponent}
@@ -39,14 +41,14 @@ addQwikLoader();
 const __pwUnmountKey = Symbol('unmountKey');
 
 window.playwrightMount = async (
-  component: JSXOutput,
+  component: Component,
   rootElement: HTMLElement,
   hooksConfig: unknown,
 ) => {
   // if (!isJsxComponent(component))
   //   throw new Error('Object mount notation is not supported');
 
-  let componentToRender = component;
+  let componentToRender = component as JSXOutput;
   for (const hook of window['__pw_hooks_before_mount'] || []) {
     const wrapper = await hook({ component, hooksConfig });
     if (wrapper) {
@@ -56,20 +58,23 @@ window.playwrightMount = async (
 
   const { cleanup } = await render(rootElement, componentToRender);
 
-  rootElement[__pwUnmountKey] = cleanup;
+  (rootElement as any)[__pwUnmountKey] = cleanup;
 
   for (const hook of window['__pw_hooks_after_mount'] || [])
     await hook({ hooksConfig });
 };
 
 window.playwrightUnmount = async (rootElement) => {
-  const cleanup = rootElement[__pwcleanupKey];
+  const cleanup = (rootElement as any)[__pwUnmountKey];
   if (!cleanup) throw new Error('Component was not mounted');
 
   cleanup();
 };
 
-window.playwrightUpdate = async (rootElement, component) => {
+window.playwrightUpdate = async (
+  rootElement: HTMLElement,
+  component: Component,
+) => {
   // if (!isJsxComponent(component))
   //   throw new Error('Object mount notation is not supported');
 

@@ -6,6 +6,7 @@
   "targets": {
     "build-mount": {
       "executor": "@nx/js:tsc",
+      "inputs": ["{projectRoot}/src/**/*"],
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/playwright-ct-qwik",
