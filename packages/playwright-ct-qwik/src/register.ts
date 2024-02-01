@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { pwRegister } from './registerSource.mjs';
+import { pwRegister } from './register-source';
 
-export default (components) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default (components: Record<string, any>): void => {
   pwRegister(components);
 };

@@ -17,90 +17,61 @@
 // @ts-check
 // This file is injected into the registry as text, no dependencies are allowed.
 
-import __pwH from 'solid-js/h';
-import { createComponent as __pwSolidCreateComponent, render as __pwSolidRender } from 'solid-js/web';
-
-/** @typedef {import('../playwright-ct-core/types/component').JsxComponent} JsxComponent */
-/** @typedef {() => import('solid-js').JSX.Element} FrameworkComponent */
-
+import { JSXOutput, render } from '@builder.io/qwik';
+import { QWIK_LOADER } from '@builder.io/qwik/loader';
 /**
  * @param {any} component
  * @returns {component is JsxComponent}
  */
-function isJsxComponent(component) {
-  return typeof component === 'object' && component && component.__pw_type === 'jsx';
+// function isJsxComponent(component) {
+//   return typeof component === 'object' && component && component.__pw_type === 'jsx';
+// }
+
+export function addQwikLoader() {
+  const scriptEl = document.createElement('script');
+  const inlineScript = document.createTextNode(QWIK_LOADER);
+  scriptEl.appendChild(inlineScript);
+  document.body.appendChild(scriptEl);
 }
 
-/**
- * @param {any} child
- */
-function __pwCreateChild(child) {
-  if (Array.isArray(child))
-    return child.map(grandChild => __pwCreateChild(grandChild));
-  if (isJsxComponent(child))
-    return __pwCreateComponent(child);
-  return child;
-}
-
-/**
- * @param {JsxComponent} component
- * @returns {any[] | undefined}
- */
-function __pwJsxChildArray(component) {
-  if (!component.props.children)
-    return;
-  if (Array.isArray(component.props.children))
-    return component.props.children;
-  return [component.props.children];
-}
-
-/**
- * @param {JsxComponent} component
- */
-function __pwCreateComponent(component) {
-  const children = __pwJsxChildArray(component)?.map(child => __pwCreateChild(child)).filter(child => {
-    if (typeof child === 'string')
-      return !!child.trim();
-    return true;
-  });
-
-  if (typeof component.type === 'string')
-    return __pwH(component.type, component.props, children);
-
-  return __pwSolidCreateComponent(component.type, { ...component.props, children });
-}
+addQwikLoader();
 
 const __pwUnmountKey = Symbol('unmountKey');
 
-window.playwrightMount = async (component, rootElement, hooksConfig) => {
-  if (!isJsxComponent(component))
-    throw new Error('Object mount notation is not supported');
+window.playwrightMount = async (
+  component: JSXOutput,
+  rootElement: HTMLElement,
+  hooksConfig: unknown,
+) => {
+  // if (!isJsxComponent(component))
+  //   throw new Error('Object mount notation is not supported');
 
-  let App = () => __pwCreateComponent(component);
-  for (const hook of window.__pw_hooks_before_mount || []) {
-    const wrapper = await hook({ App, hooksConfig });
-    if (wrapper)
-      App = () => wrapper;
+  let componentToRender = component;
+  for (const hook of window['__pw_hooks_before_mount'] || []) {
+    const wrapper = await hook({ component, hooksConfig });
+    if (wrapper) {
+      componentToRender = wrapper;
+    }
   }
 
-  const unmount = __pwSolidRender(App, rootElement);
-  rootElement[__pwUnmountKey] = unmount;
+  const { cleanup } = await render(rootElement, componentToRender);
 
-  for (const hook of window.__pw_hooks_after_mount || [])
+  rootElement[__pwUnmountKey] = cleanup;
+
+  for (const hook of window['__pw_hooks_after_mount'] || [])
     await hook({ hooksConfig });
 };
 
-window.playwrightUnmount = async rootElement => {
-  const unmount = rootElement[__pwUnmountKey];
-  if (!unmount)
-    throw new Error('Component was not mounted');
+window.playwrightUnmount = async (rootElement) => {
+  const cleanup = rootElement[__pwcleanupKey];
+  if (!cleanup) throw new Error('Component was not mounted');
 
-  unmount();
+  cleanup();
 };
 
 window.playwrightUpdate = async (rootElement, component) => {
-  if (!isJsxComponent(component))
-    throw new Error('Object mount notation is not supported');
+  // if (!isJsxComponent(component))
+  //   throw new Error('Object mount notation is not supported');
 
   window.playwrightUnmount(rootElement);
   window.playwrightMount(component, rootElement, {});
