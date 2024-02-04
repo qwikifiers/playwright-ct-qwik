@@ -28,13 +28,13 @@ export function beforeMount<HooksConfig extends JsonObject>(
   callback: (params: {
     hooksConfig?: HooksConfig;
     App: () => JSXOutput;
-  }) => Promise<void | JSXOutput>,
+  }) => Promise<void | JSXOutput>
 ): void {
   __pw_hooks_before_mount.push(callback);
 }
 
 export function afterMount<HooksConfig extends JsonObject>(
-  callback: (params: { hooksConfig?: HooksConfig }) => Promise<void>,
+  callback: (params: { hooksConfig?: HooksConfig }) => Promise<void>
 ): void {
   __pw_hooks_after_mount.push(callback);
 }

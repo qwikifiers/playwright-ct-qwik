@@ -20,7 +20,10 @@
 
 import { JSXOutput, render } from '@builder.io/qwik';
 import { QWIK_LOADER } from '@builder.io/qwik/loader';
-import { Component } from '@playwright/experimental-ct-core/types/component';
+import {
+  Component,
+  JsonObject,
+} from '@playwright/experimental-ct-core/types/component';
 /**
  * @param {any} component
  * @returns {component is JsxComponent}
@@ -43,12 +46,12 @@ const __pwUnmountKey = Symbol('unmountKey');
 window.playwrightMount = async (
   component: Component,
   rootElement: HTMLElement,
-  hooksConfig: unknown,
+  hooksConfig: JsonObject
 ) => {
   // if (!isJsxComponent(component))
   //   throw new Error('Object mount notation is not supported');
 
-  let componentToRender = component as JSXOutput;
+  let componentToRender = component as unknown as JSXOutput;
   for (const hook of window['__pw_hooks_before_mount'] || []) {
     const wrapper = await hook({ component, hooksConfig });
     if (wrapper) {
@@ -73,7 +76,7 @@ window.playwrightUnmount = async (rootElement) => {
 
 window.playwrightUpdate = async (
   rootElement: HTMLElement,
-  component: Component,
+  component: Component
 ) => {
   // if (!isJsxComponent(component))
   //   throw new Error('Object mount notation is not supported');
