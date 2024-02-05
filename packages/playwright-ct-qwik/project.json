@@ -26,16 +26,6 @@
         ]
       }
     },
-    "build-definition": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/packages/playwright-ct-qwik",
-        "main": "packages/playwright-ct-qwik/definition.ts",
-        "tsConfig": "packages/playwright-ct-qwik/tsconfig.definition.json",
-        "clean": false
-      }
-    },
     "copy": {
       "executor": "nx:run-commands",
       "options": {
@@ -45,9 +35,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "nx run playwright-ct-qwik:build-definition --skip-nx-cache && nx run playwright-ct-qwik:build-mount --skip-nx-cache"
-        ]
+        "commands": ["nx run playwright-ct-qwik:build-mount --skip-nx-cache"]
       },
       "outputPath": "node_modules/playwright-ct-qwik",
       "outputs": ["{workspaceRoot}/dist/packages/playwright-ct-qwik"]

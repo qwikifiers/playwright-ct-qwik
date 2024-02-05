@@ -26,9 +26,13 @@ import path from 'path';
 
 const plugin = async () => {
   // Only fetch upon request to avoid resolution in workers.
-  const { createPlugin } = require('@playwright/experimental-ct-core/plugin');
-  return createPlugin(path.join(__dirname, 'register-source.mjs'), () =>
-    import('@builder.io/qwik/optimizer').then((plugin) => plugin.qwikVite()),
+  const {
+    createPlugin,
+  } = require('@playwright/experimental-ct-core/lib/vitePlugin');
+  return createPlugin(path.join(__dirname, 'register-source.js'), () =>
+    import('@builder.io/qwik/optimizer').then((plugin) =>
+      plugin.qwikVite({ srcDir: 'apps/qwik-app/src', csr: true }),
+    ),
   );
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

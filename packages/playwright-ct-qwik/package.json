@@ -2,8 +2,18 @@
   "name": "playwright-ct-qwik",
   "version": "0.0.0",
   "exports": {
-    "node": "./definition.js",
-    "default": "./src/index.js"
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./register": {
+      "types": "./src/register-source.d.ts",
+      "default": "./src/register-source.js"
+    },
+    "./hooks": {
+      "types": "./src/hooks.d.ts",
+      "default": "./src/hooks.js"
+    }
   },
   "files": [
     "package.json",
