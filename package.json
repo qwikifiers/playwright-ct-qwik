@@ -10,7 +10,8 @@
     "build": "nx build playwright-ct-qwik",
     "commit": "git-cz",
     "format:fix": "pretty-quick --staged",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test-ct": "playwright test -c playwright-ct.config.ts"
   },
   "devDependencies": {
     "@builder.io/qwik": "1.4.2",
@@ -19,11 +20,11 @@
     "@commitlint/config-angular": "^17.6.5",
     "@commitlint/config-conventional": "^17.6.5",
     "@jscutlery/semver": "^3.0.0",
-    "@nx/workspace": "17.2.8",
-    "@nx/vite": "17.2.8",
-    "@nx/js": "17.2.8",
-    "@nx/eslint-plugin": "17.2.8",
     "@nx/eslint": "17.2.8",
+    "@nx/eslint-plugin": "17.2.8",
+    "@nx/js": "17.2.8",
+    "@nx/vite": "17.2.8",
+    "@nx/workspace": "17.2.8",
     "@playwright/experimental-ct-core": "1.42.0-alpha-jan-18-2024",
     "@playwright/test": "1.41.1",
     "@types/eslint": "8.56.2",
@@ -62,6 +63,5 @@
     "qwik",
     "playwright",
     "component testing"
-  ],
-  "dependencies": {}
+  ]
 }

@@ -10,16 +10,17 @@
     "allowSyntheticDefaultImports": true,
     "noFallthroughCasesInSwitch": true,
     "jsxImportSource": "@builder.io/qwik",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
   },
   "files": [],
   "include": [],
   "references": [
     {
-      "path": "./tsconfig.lib.json"
+      "path": "./tsconfig.lib.json",
     },
     {
-      "path": "./tsconfig.definition.json"
-    }
-  ]
+      "path": "./tsconfig.definition.json",
+    },
+  ],
 }
